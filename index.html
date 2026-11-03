@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f6f8">
+<title>Budget Allocation</title>
+<style>
+:root{--bg:#f5f6f8;--panel:#fff;--ink:#20242c;--muted:#737b88;--line:#e6e9ee;--accent:#465bd8;--accent-soft:#eef0ff;--good:#16845b;--warn:#b56b13;--danger:#c44444;--shadow:0 8px 28px rgba(25,35,55,.055);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}button,input,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.app{max-width:1180px;margin:auto;padding:30px 22px 56px}.top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:800;color:var(--accent)}h1{font-size:clamp(27px,4vw,38px);letter-spacing:-.045em;margin:5px 0 4px}.sub{color:var(--muted);margin:0;max-width:650px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 12px;border-radius:10px;font-weight:650;font-size:12px;transition:.15s}.btn:hover{border-color:#bbc3d0;transform:translateY(-1px)}.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn.soft{background:var(--accent-soft);color:var(--accent);border-color:transparent}.btn.danger{color:var(--danger)}.btn.small{padding:6px 9px;font-size:11px}.grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.85fr);gap:16px;align-items:start}.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:19px;box-shadow:var(--shadow);min-width:0}.card+.card{margin-top:16px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.section-head h2{font-size:16px;letter-spacing:-.02em;margin:0}.muted{color:var(--muted)}.smalltext{font-size:11px;color:var(--muted)}.status{font-size:11px;color:var(--good);display:flex;align-items:center;gap:6px}.dot{width:7px;height:7px;background:var(--good);border-radius:50%}.budget-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}.field{width:100%;min-width:0;border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 11px;color:var(--ink);outline:none}.field:focus{border-color:#8995ee;box-shadow:0 0 0 3px #465bd815}.field-label{display:block;font-size:11px;font-weight:700;color:#555e6c;margin-bottom:6px}.money-input{font-variant-numeric:tabular-nums}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px}.stat{background:#f8f9fb;border:1px solid #edf0f4;border-radius:12px;padding:12px;min-width:0}.stat span{display:block;color:var(--muted);font-size:10px;font-weight:700;margin-bottom:5px}.stat strong{font-size:clamp(16px,2vw,21px);letter-spacing:-.035em;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.bar{height:13px;border-radius:99px;background:#edf0f4;overflow:hidden;display:flex;margin-top:14px}.bar-seg{height:100%;min-width:0}.bar-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:9px}.legend{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:5px}.swatch{width:8px;height:8px;border-radius:3px;display:inline-block;flex:none}.toolbar{display:flex;gap:7px;flex-wrap:wrap}.tree{display:flex;flex-direction:column;gap:9px}.node{border:1px solid var(--line);border-radius:13px;background:#fff;min-width:0;overflow:hidden}.node.depth-1{margin-left:18px;border-left:3px solid var(--node-color,#cbd2e0)}.node.depth-2{margin-left:18px;border-left:3px solid var(--node-color,#cbd2e0)}.node.depth-3,.node.depth-4,.node.depth-5,.node.depth-6,.node.depth-7,.node.depth-8{margin-left:15px;border-left:3px solid var(--node-color,#cbd2e0)}.node-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(105px,145px) auto;gap:10px;align-items:center;padding:11px 12px}.node-title{display:flex;align-items:center;gap:8px;min-width:0}.node-title input[type=text]{font-weight:700;border:0;padding:5px 2px;min-width:0;width:100%;background:transparent;outline:none;border-bottom:1px solid transparent}.node-title input[type=text]:focus{border-color:#aab2c1}.color-input{width:25px;height:25px;border:0;padding:0;background:transparent;flex:none}.node-amount{width:100%;text-align:right;font-weight:750;font-variant-numeric:tabular-nums;padding:8px 9px}.node-amount.derived{background:#f6f7fa;color:#596171}.allocation-slider{padding:0 13px 12px 45px;display:grid;grid-template-columns:auto minmax(90px,1fr) auto;gap:10px;align-items:center}.allocation-slider input[type=range]{width:100%;height:28px;margin:0;accent-color:var(--accent);cursor:ew-resize;touch-action:pan-y}.allocation-slider .range-value{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}.allocation-slider input[type=range]:focus-visible{outline:3px solid #465bd855;outline-offset:3px}.allocation-slider .range-caption{grid-column:1/-1;display:flex;justify-content:space-between;margin-top:-7px;font-size:9px;color:#89919e}.node-controls{display:flex;gap:5px;align-items:center;justify-content:flex-end}.iconbtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;color:#596171;font-size:11px;white-space:nowrap}.iconbtn:hover{background:#f6f7fa}.collapse{width:28px;height:28px;padding:0;font-size:15px}.node-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:0 12px 10px 45px;color:var(--muted);font-size:10px}.node-meta b{color:var(--ink)}.children{padding:0 10px 10px 0;display:flex;flex-direction:column;gap:7px}.node-spend{border-top:1px solid #f0f1f4;padding:10px 12px 11px 45px;background:#fcfcfd}.spend-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(95px,125px) auto;gap:7px}.spend-list{display:flex;flex-direction:column;gap:5px;margin-top:8px}.spend-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;font-size:11px;color:var(--muted);min-width:0}.spend-row span:first-child{overflow-wrap:anywhere}.spend-row strong{color:var(--ink);font-variant-numeric:tabular-nums}.empty{padding:25px 15px;text-align:center;color:var(--muted);border:1px dashed #dce1e9;border-radius:12px}.settings{display:grid;grid-template-columns:1fr 1fr;gap:12px}.toggleline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0f1f4}.toggleline:last-child{border-bottom:0}.toggleline label{font-size:12px;font-weight:650}.toggle{accent-color:var(--accent);width:17px;height:17px}.range-row{display:flex;align-items:center;gap:10px}.range-row input{width:100%;accent-color:var(--accent)}.notice{font-size:11px;color:var(--muted);line-height:1.5;margin-top:10px}.priority{accent-color:var(--accent)}.remaining-positive{color:var(--good)}.remaining-negative{color:var(--danger)}.error{display:none;margin-top:10px;padding:10px 12px;border-radius:9px;background:#fff1f1;color:#a63232;font-size:12px}.footer{text-align:center;color:#9299a4;font-size:10px;margin-top:22px}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.top{display:block}.actions{margin-top:14px}.rightcol{display:grid;grid-template-columns:1fr 1fr;gap:12px}.rightcol .card+.card{margin-top:0}}
+@media(max-width:560px){.allocation-slider{padding-left:12px;grid-template-columns:auto minmax(70px,1fr) auto;gap:7px}.app{padding:20px 12px 40px}.card{padding:14px;border-radius:14px}.stats{gap:6px}.stat{padding:9px}.stat strong{font-size:16px}.node-head{grid-template-columns:minmax(0,1fr) 100px;gap:7px}.node-controls{grid-column:1/-1;justify-content:flex-start;padding-left:34px}.node-title{grid-column:1/-1}.node-amount{grid-column:1/-1;text-align:left}.node-meta{padding-left:12px}.node-spend{padding-left:12px}.spend-form{grid-template-columns:1fr 105px}.spend-form button{grid-column:1/-1}.rightcol{display:block}.rightcol .card+.card{margin-top:12px}.budget-row{grid-template-columns:1fr}.toolbar .btn{flex:1}.settings{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+ <div><div class="eyebrow">Personal finance workspace</div><h1>Budget Allocation</h1><p class="sub">Give every peso a purpose. Organize allocations into nested categories, track spending, and keep your plan saved in this browser.</p></div>
+ <div class="actions"><button class="btn" id="exportBtn">Export JSON</button><button class="btn" id="importBtn">Import JSON</button><input id="importFile" type="file" accept=".json,application/json" hidden></div>
+</header>
+<div class="grid">
+<main>
+<section class="card">
+ <div class="section-head"><h2>Budget overview</h2><span class="status"><i class="dot"></i><span id="saveStatus">Automatically saved</span></span></div>
+ <div class="budget-row"><div><label class="field-label" for="budgetInput">Total budget (PHP)</label><input class="field money-input" id="budgetInput" type="number" min="0" step="0.01" inputmode="decimal" placeholder="e.g. 50000"></div><button class="btn soft" id="addRootBtn">＋ Add allocation</button></div>
+ <div class="stats">
+  <div class="stat"><span>TOTAL BUDGET</span><strong id="totalBudget">₱0.00</strong></div>
+  <div class="stat"><span>ALLOCATED</span><strong id="allocatedTotal">₱0.00</strong></div>
+  <div class="stat"><span>UNALLOCATED</span><strong id="unallocatedTotal">₱0.00</strong></div>
+  <div class="stat"><span>TOTAL SPENT</span><strong id="spentTotal">₱0.00</strong></div>
+  <div class="stat"><span>AVAILABLE TO SPEND</span><strong id="availableTotal">₱0.00</strong></div>
+  <div class="stat"><span>ALLOCATIONS LEFT</span><strong id="remainingTotal">₱0.00</strong></div>
+ </div>
+ <div class="bar" id="allocationBar" aria-label="Budget allocation bar"></div><div class="bar-legend" id="barLegend"></div>
+ <div class="notice">Only the lowest-level allocations count toward the budget total. Parent totals are calculated from their children, so nested money is never counted twice.</div>
+</section>
+<section class="card">
+ <div class="section-head"><div><h2>Allocations</h2><div class="smalltext">Add categories, nest sub-allocations, and track each expense.</div></div><div class="toolbar"><button class="btn small" id="expandAllBtn">Expand all</button><button class="btn small" id="collapseAllBtn">Collapse all</button></div></div>
+ <div id="tree" class="tree"></div>
+ <div class="error" id="budgetError" role="alert"></div>
+ <div class="notice">A category becomes a parent when you add a sub-allocation. Its amount then automatically equals the sum of its children. You can still add a regular allocation with no children.</div>
+</section>
+</main>
+<aside class="rightcol">
+<section class="card">
+ <div class="section-head"><h2>Allocation settings</h2></div>
+ <div class="toggleline"><label for="autoDistribute">Auto-distribute remaining budget</label><input class="toggle" id="autoDistribute" type="checkbox"></div>
+ <div class="notice">When enabled, leftover budget is shared across eligible top-level allocations. If the budget is lowered, eligible allocations are reduced proportionally. Priority allocations are excluded. Moving one allocation's slider preserves that amount and distributes any leftover among the others.</div>
+ <div class="toggleline"><label for="priorityMode">Priority protection</label><input class="toggle" id="priorityMode" type="checkbox" checked></div>
+ <div class="notice">When an allocation is increased beyond the available budget, non-priority allocations are reduced first. Priority allocations are protected where possible.</div>
+ <div style="margin-top:14px"><label class="field-label" for="sensitivity">Slider sensitivity <b id="sensitivityLabel">1×</b></label><div class="range-row"><span class="smalltext">Fine</span><input id="sensitivity" type="range" min="1" max="10" step="1" value="1"><span class="smalltext">Fast</span></div><div class="notice">Controls slider step size: Fine gives smaller adjustments; Fast gives larger jumps. Type an exact amount in the amount field.</div></div>
+</section>
+<section class="card">
+ <div class="section-head"><h2>Data &amp; backup</h2></div>
+ <p class="smalltext">Your changes save automatically to this browser. JSON backups are separate and can be stored wherever you like.</p>
+ <div class="toolbar" style="margin-top:12px"><button class="btn" id="exportBtn2">Download backup</button><button class="btn" id="importBtn2">Import backup</button></div>
+ <hr style="border:0;border-top:1px solid var(--line);margin:17px 0">
+ <button class="btn danger" id="resetBtn">Reset all saved data</button>
+ <div class="notice">Reset clears this browser's saved budget, allocations, spending entries, and settings. Export a backup first if you may need it.</div>
+</section>
+</aside>
+</div>
+<div class="footer">Budget Allocation · Standalone browser app · Data stays on this device</div>
+</div>
+<script>
+(()=>{'use strict';
+const KEY='budgetAllocation.nested.v1';
+const $=id=>document.getElementById(id);
+const PALETTE=['#6478d8','#e69b53','#4f9b83','#bc78a5','#d1b64f','#5c9fc4','#8a79bc','#d4776c','#7e9a62','#8b929f'];
+const money=n=>'₱'+(Number(n||0)).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=v=>{const n=Number(v);return Number.isFinite(n)?Math.max(0,n):0};
+const round=n=>Math.round((n+Number.EPSILON)*100)/100;
+const id=()=>globalThis.crypto?.randomUUID?.()||('a'+Date.now().toString(36)+Math.random().toString(36).slice(2,9));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function fresh(){return {version:2,budget:0,allocations:[],autoDistribute:false,priorityMode:true,sensitivity:1}}
+function normalizeNode(x,depth=0){
+ if(!x||typeof x!=='object')throw Error('An allocation entry is not valid.');
+ const children=Array.isArray(x.children)?x.children.map(c=>normalizeNode(c,depth+1)):[];
+ if(depth>20)throw Error('The allocation hierarchy is too deeply nested.');
+ return {id:typeof x.id==='string'&&x.id?x.id:id(),name:String(x.name||'New allocation').slice(0,100),amount:round(num(x.amount)),color:/^#[0-9a-f]{6}$/i.test(x.color||'')?x.color:PALETTE[depth%PALETTE.length],priority:!!x.priority,collapsed:!!x.collapsed,spending:Array.isArray(x.spending)?x.spending.map(s=>({id:typeof s.id==='string'?s.id:id(),description:String(s.description||'Expense').slice(0,180),amount:round(num(s.amount)),date:String(s.date||new Date().toISOString())})).filter(s=>s.amount>0):[],children};
+}
+function normalize(data){
+ if(!data||typeof data!=='object')throw Error('The JSON file must contain an object.');
+ const a=Array.isArray(data.allocations)?data.allocations:Array.isArray(data.items)?data.items:null;
+ if(!a)throw Error('The backup does not contain an allocations array.');
+ return {version:2,budget:round(num(data.budget??data.totalBudget??0)),allocations:a.map(x=>normalizeNode(x)),autoDistribute:!!data.autoDistribute,priorityMode:data.priorityMode!==false,sensitivity:Math.max(1,Math.min(10,Math.round(num(data.sensitivity)||1)))};
+}
+let state=fresh(),rendering=false,autoBusy=false;
+function walk(nodes,fn,parent=null,depth=0){nodes.forEach((n,i)=>{fn(n,parent,i,depth);walk(n.children||[],fn,n,depth+1)})}
+function findNode(idv,nodes=state.allocations){for(const n of nodes){if(n.id===idv)return n;const found=findNode(idv,n.children||[]);if(found)return found}return null}
+function leafTotal(n){return n.children.length?n.children.reduce((s,c)=>s+leafTotal(c),0):n.amount}
+function ownSpend(n){return (n.spending||[]).reduce((s,x)=>s+x.amount,0)}
+function subtreeSpend(n){return ownSpend(n)+(n.children||[]).reduce((s,c)=>s+subtreeSpend(c),0)}
+function totalAllocated(){return state.allocations.reduce((s,n)=>s+leafTotal(n),0)}
+function totalSpent(){return state.allocations.reduce((s,n)=>s+subtreeSpend(n),0)}
+function nodeAmount(n){return n.children.length?n.children.reduce((s,c)=>s+leafTotal(c),0):n.amount}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));$('saveStatus').textContent='Automatically saved'}catch(e){$('saveStatus').textContent='Could not save — storage may be full'}}
+function setError(msg){const el=$('budgetError');el.textContent=msg;el.style.display=msg?'block':'none'}
+function clampToBudget(changedId,oldAmount,newAmount){
+ const target=findNode(changedId);if(!target)return;
+ const delta=round(newAmount-oldAmount);if(delta<=0)return;
+ let excess=round(totalAllocated()-state.budget);if(excess<=0)return;
+ if(state.priorityMode){
+  const candidates=[];walk(state.allocations,n=>{if(!n.children.length&&n.id!==changedId&&!n.priority)candidates.push(n)});
+  candidates.sort((a,b)=>b.amount-a.amount);
+  for(const n of candidates){if(excess<=0)break;const cut=Math.min(n.amount,excess);n.amount=round(n.amount-cut);excess=round(excess-cut)}
+ }
+ if(excess>0){target.amount=round(Math.max(0,target.amount-excess));setError('The available budget was not enough. The new amount was limited to the remaining budget.')}
+}
+function syncAuto({excludeId=null,rebalance=false}={}){
+ if(!state.autoDistribute||autoBusy)return;
+ autoBusy=true;
+ try{
+  const candidates=state.allocations.filter(n=>!n.children.length&&!n.priority&&n.id!==excludeId);
+  if(!candidates.length)return;
+  let delta=round(state.budget-totalAllocated());
+  if(delta>0){
+   const share=Math.floor((delta/candidates.length)*100)/100;
+   let assigned=0;
+   candidates.forEach((n,i)=>{
+    const add=i===candidates.length-1?round(delta-assigned):share;
+    n.amount=round(n.amount+add);assigned=round(assigned+add);
+   });
+  }else if(delta<0){
+   let excess=Math.abs(delta);
+   const pool=candidates.reduce((sum,n)=>sum+n.amount,0);
+   if(pool<=0)return;
+   // Reduce eligible allocations proportionally so the total returns to budget.
+   let removed=0;
+   candidates.forEach((n,i)=>{
+    const cut=i===candidates.length-1
+      ? round(excess-removed)
+      : round(Math.min(n.amount,excess*(n.amount/pool)));
+    const actual=Math.min(n.amount,Math.max(0,cut));
+    n.amount=round(n.amount-actual);removed=round(removed+actual);
+   });
+   // Correct any cent-level remainder without allowing a negative allocation.
+   let left=round(excess-removed);
+   for(const n of candidates){
+    if(left<=0)break;
+    const cut=Math.min(n.amount,left);n.amount=round(n.amount-cut);left=round(left-cut);
+   }
+  }
+ }finally{autoBusy=false}
+}
+function mutate(fn,{auto=true,excludeId=null,rebalance=false}={}){setError('');fn();if(auto)syncAuto({excludeId,rebalance});save();render()}
+function renderSummary(){
+ const allocated=totalAllocated(),spent=totalSpent(),unallocated=round(state.budget-allocated),left=round(allocated-spent);
+ $('totalBudget').textContent=money(state.budget);$('allocatedTotal').textContent=money(allocated);$('unallocatedTotal').textContent=money(unallocated);$('spentTotal').textContent=money(spent);$('availableTotal').textContent=money(round(state.budget-spent));$('remainingTotal').textContent=money(left);
+ $('unallocatedTotal').className=unallocated<0?'remaining-negative':'remaining-positive';$('remainingTotal').className=left<0?'remaining-negative':'remaining-positive';
+ const bar=$('allocationBar'),legend=$('barLegend');bar.innerHTML='';legend.innerHTML='';
+ let entries=[];walk(state.allocations,n=>{if(!n.children.length&&n.amount>0)entries.push(n)});
+ entries.forEach(n=>{const seg=document.createElement('div');seg.className='bar-seg';seg.style.width=(state.budget?Math.max(0,n.amount/state.budget*100):0)+'%';seg.style.background=n.color;bar.append(seg);const l=document.createElement('span');l.className='legend';l.innerHTML=`<i class="swatch" style="background:${n.color}"></i>${esc(n.name)} · ${money(n.amount)}`;legend.append(l)});
+ const remaining=round(state.budget-allocated);if(remaining>0){const seg=document.createElement('div');seg.className='bar-seg';seg.style.width=(state.budget?remaining/state.budget*100:0)+'%';seg.style.background='#e9ecf1';bar.append(seg);const l=document.createElement('span');l.className='legend';l.innerHTML='<i class="swatch" style="background:#e9ecf1"></i>Unallocated';legend.append(l)}
+}
+function renderNode(n,depth=0){
+ const has=n.children.length,amount=nodeAmount(n),spent=subtreeSpend(n),remaining=round(amount-spent),collapsed=n.collapsed;
+ const div=document.createElement('div');div.className=`node depth-${Math.min(depth,8)}`;div.style.setProperty('--node-color',n.color);div.dataset.node=n.id;
+ const head=document.createElement('div');head.className='node-head';
+ head.innerHTML=`<div class="node-title"><button class="iconbtn collapse" data-action="collapse" data-id="${esc(n.id)}" title="${collapsed?'Expand':'Collapse'}">${collapsed?'＋':'−'}</button><input class="color-input" type="color" value="${n.color}" data-action="color" data-id="${esc(n.id)}" aria-label="Allocation color"><input type="text" maxlength="100" value="${esc(n.name)}" data-action="name" data-id="${esc(n.id)}" aria-label="Allocation name"></div>
+ <input class="field node-amount ${has?'derived':''}" type="number" min="0" step="0.01" inputmode="decimal" value="${amount.toFixed(2)}" data-action="amount" data-id="${esc(n.id)}" ${has?'readonly title="Parent amount is calculated from its children"':''} aria-label="Allocation amount">
+ <div class="node-controls"><label class="smalltext" title="Protect this allocation during priority adjustments"><input class="priority" type="checkbox" data-action="priority" data-id="${esc(n.id)}" ${n.priority?'checked':''}> Priority</label><button class="iconbtn" data-action="add-child" data-id="${esc(n.id)}">＋ Sub</button><button class="iconbtn" data-action="spend-toggle" data-id="${esc(n.id)}">Spend</button><button class="iconbtn" data-action="delete" data-id="${esc(n.id)}">Delete</button></div>`;
+ div.append(head);
+ if(!has){
+  const slider=document.createElement('div');slider.className='allocation-slider';
+  const max=Math.max(1,state.budget,amount);
+  const step=Math.max(0.01,round(max/(1000/Math.max(1,state.sensitivity))));
+  slider.innerHTML=`<span class="range-value">₱0</span><input type="range" min="0" max="${max}" step="${step}" value="${Math.min(amount,max)}" data-action="allocation-slider" data-id="${esc(n.id)}" aria-label="Adjust ${esc(n.name)} allocation"><span class="range-value">${money(amount)}</span><div class="range-caption"><span>Drag to adjust allocation</span><span>${money(max)} max</span></div>`;
+  div.append(slider);
+ }
+ const meta=document.createElement('div');meta.className='node-meta';meta.innerHTML=`<span>${has?`${n.children.length} direct sub-allocation${n.children.length===1?'':'s'}`:'Regular allocation'}</span><span>Spent: <b>${money(spent)}</b></span><span>Remaining: <b class="${remaining<0?'remaining-negative':'remaining-positive'}">${money(remaining)}</b></span>`;div.append(meta);
+ if(!collapsed&&has){const kids=document.createElement('div');kids.className='children';n.children.forEach(c=>kids.append(renderNode(c,depth+1)));div.append(kids)}
+ if(!collapsed){const spend=document.createElement('div');spend.className='node-spend';spend.innerHTML=`<form class="spend-form" data-spend-form="${esc(n.id)}"><input class="field" name="description" maxlength="180" placeholder="Expense description" required><input class="field money-input" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="Amount (₱)" required><button class="btn small soft" type="submit">＋ Add expense</button></form>`;
+ if(n.spending.length){const list=document.createElement('div');list.className='spend-list';n.spending.forEach(s=>{const row=document.createElement('div');row.className='spend-row';row.innerHTML=`<span>${esc(s.description)} <span class="smalltext">· ${new Date(s.date).toLocaleDateString()}</span></span><strong>${money(s.amount)}</strong><button class="iconbtn" data-action="delete-spend" data-id="${esc(n.id)}" data-spend="${esc(s.id)}" aria-label="Delete expense">×</button>`;list.append(row)});spend.append(list)}
+ div.append(spend)}
+ return div;
+}
+function renderTree(){
+ const host=$('tree');host.innerHTML='';
+ if(!state.allocations.length){host.innerHTML='<div class="empty">No allocations yet. Add your first category to start planning.</div>';return}
+ state.allocations.forEach(n=>host.append(renderNode(n)));
+}
+function render(){
+ rendering=true;
+ $('budgetInput').value=state.budget?state.budget.toFixed(2):'';
+ $('autoDistribute').checked=state.autoDistribute;$('priorityMode').checked=state.priorityMode;$('sensitivity').value=state.sensitivity;$('sensitivityLabel').textContent=state.sensitivity+'×';
+ renderSummary();renderTree();rendering=false;
+}
+function addAllocation(parentId=null){
+ const parent=parentId?findNode(parentId):null;
+ const n={id:id(),name:parent?'New sub-allocation':'New allocation',amount:0,color:parent?parent.color:PALETTE[state.allocations.length%PALETTE.length],priority:false,collapsed:false,spending:[],children:[]};
+ mutate(()=>{if(parent){parent.children.push(n);parent.collapsed=false}else state.allocations.push(n)});
+ const input=document.querySelector(`[data-action="name"][data-id="${CSS.escape(n.id)}"]`);if(input){input.focus();input.select()}
+}
+function deleteAllocation(idv){
+ const n=findNode(idv);if(!n)return;
+ if(!confirm(`Delete “${n.name}” and all of its nested allocations and spending entries?`))return;
+ function remove(arr){const i=arr.findIndex(x=>x.id===idv);if(i>=0){arr.splice(i,1);return true}return arr.some(x=>remove(x.children))}
+ mutate(()=>remove(state.allocations));
+}
+function adjustAmount(idv,value){
+ const n=findNode(idv);if(!n||n.children.length)return;
+ const old=n.amount,newAmount=round(num(value));
+ mutate(()=>{n.amount=newAmount;clampToBudget(idv,old,newAmount)});
+}
+function handleTreeInput(e){
+ const el=e.target,act=el.dataset.action,idv=el.dataset.id;if(!act||!idv)return;const n=findNode(idv);if(!n)return;
+ if(act==='name'){n.name=el.value;save();const title=el.closest('.node').querySelector('.node-title input[type=text]');if(title)title.value=el.value;renderSummary()}
+ if(act==='amount'&&e.type==='change')adjustAmount(idv,el.value);
+ if(act==='color')mutate(()=>n.color=el.value);
+ if(act==='priority')mutate(()=>n.priority=el.checked);
+}
+$('tree').addEventListener('input',e=>{
+ const el=e.target,act=el.dataset.action,idv=el.dataset.id;
+ if(act==='name'){handleTreeInput(e);return}
+ if(act==='allocation-slider'&&idv){
+  const n=findNode(idv);if(!n||n.children.length)return;
+  n.amount=round(num(el.value));
+  const node=el.closest('.node');
+  const amountInput=node?.querySelector('[data-action="amount"]');
+  const valueLabel=el.parentElement?.querySelectorAll('.range-value')[1];
+  if(amountInput)amountInput.value=n.amount.toFixed(2);
+  if(valueLabel)valueLabel.textContent=money(n.amount);
+  renderSummary();
+  const meta=node?.querySelector('.node-meta');
+  if(meta){
+   const spent=subtreeSpend(n),remaining=round(n.amount-spent);
+   meta.innerHTML=`<span>Regular allocation</span><span>Spent: <b>${money(spent)}</b></span><span>Remaining: <b class="${remaining<0?'remaining-negative':'remaining-positive'}">${money(remaining)}</b></span>`;
+  }
+ }
+});
+$('tree').addEventListener('change',e=>{
+ const el=e.target,act=el.dataset.action,idv=el.dataset.id;
+ if(act==='allocation-slider'&&idv){
+  const n=findNode(idv);if(!n)return;
+  mutate(()=>{
+   n.amount=round(num(el.value));
+   let excess=round(totalAllocated()-state.budget);
+   if(excess>0){
+    const others=[];walk(state.allocations,x=>{if(!x.children.length&&x.id!==idv&&!x.priority)others.push(x)});
+    others.sort((a,b)=>b.amount-a.amount);
+    for(const x of others){if(excess<=0)break;const cut=Math.min(x.amount,excess);x.amount=round(x.amount-cut);excess=round(excess-cut)}
+    if(excess>0){const cut=Math.min(n.amount,excess);n.amount=round(n.amount-cut);setError('The allocation was limited to the available budget.')}
+   }
+  },{excludeId:idv});
+  return;
+ }
+ if(['amount','color','priority'].includes(act))handleTreeInput(e);
+});
+$('tree').addEventListener('click',e=>{
+ const b=e.target.closest('[data-action]');if(!b)return;const act=b.dataset.action,idv=b.dataset.id,n=findNode(idv);if(!n)return;
+ if(act==='collapse')mutate(()=>n.collapsed=!n.collapsed);
+ if(act==='add-child')addAllocation(idv);
+ if(act==='delete')deleteAllocation(idv);
+ if(act==='spend-toggle'){const form=b.closest('.node').querySelector('.node-spend');if(form)form.hidden=!form.hidden}
+ if(act==='delete-spend'){const sid=b.dataset.spend;mutate(()=>n.spending=n.spending.filter(s=>s.id!==sid))}
+});
+$('tree').addEventListener('submit',e=>{
+ const form=e.target.closest('[data-spend-form]');if(!form)return;e.preventDefault();const n=findNode(form.dataset.spendForm);if(!n)return;
+ const fd=new FormData(form),description=String(fd.get('description')||'').trim(),amount=round(num(fd.get('amount')));
+ if(!description||amount<=0)return;
+ mutate(()=>n.spending.push({id:id(),description,amount,date:new Date().toISOString()}));form.reset();
+});
+$('budgetInput').addEventListener('change',e=>{
+ const v=round(num(e.target.value));
+ mutate(()=>{
+  state.budget=v;
+  const total=totalAllocated();
+  if(total>v&&!state.autoDistribute){
+   let excess=round(total-v);const leaves=[];
+   walk(state.allocations,n=>{if(!n.children.length&&!n.priority)leaves.push(n)});
+   leaves.sort((a,b)=>b.amount-a.amount);
+   for(const n of leaves){if(excess<=0)break;const cut=Math.min(n.amount,excess);n.amount=round(n.amount-cut);excess=round(excess-cut)}
+   if(excess>0)setError('Some priority allocations exceed the new budget. Reduce them manually to fit the budget.');
+  }
+ },{rebalance:true});
+});
+$('addRootBtn').addEventListener('click',()=>addAllocation());
+$('autoDistribute').addEventListener('change',e=>mutate(()=>state.autoDistribute=e.target.checked));
+$('priorityMode').addEventListener('change',e=>mutate(()=>state.priorityMode=e.target.checked));
+$('sensitivity').addEventListener('input',e=>{state.sensitivity=Number(e.target.value);$('sensitivityLabel').textContent=state.sensitivity+'×';save()});
+$('sensitivity').addEventListener('change',render);
+$('expandAllBtn').addEventListener('click',()=>mutate(()=>walk(state.allocations,n=>n.collapsed=false)));
+$('collapseAllBtn').addEventListener('click',()=>mutate(()=>walk(state.allocations,n=>{if(n.children.length)n.collapsed=true})));
+function exportJSON(){
+ const payload={app:'Budget Allocation',version:2,exportedAt:new Date().toISOString(),...state};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='budget-allocation-backup.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function importJSON(){ $('importFile').click() }
+$('exportBtn').addEventListener('click',exportJSON);$('exportBtn2').addEventListener('click',exportJSON);$('importBtn').addEventListener('click',importJSON);$('importBtn2').addEventListener('click',importJSON);
+$('importFile').addEventListener('change',async e=>{
+ const file=e.target.files?.[0];if(!file)return;
+ try{const parsed=JSON.parse(await file.text()),next=normalize(parsed);if(!confirm('Import this backup and replace your current budget, allocations, spending, and settings?'))return;state=next;syncAuto();save();render();alert('Backup imported successfully and saved in this browser.')}
+ catch(err){alert('Import failed: '+err.message)}
+ finally{e.target.value=''}
+});
+$('resetBtn').addEventListener('click',()=>{
+ if(!confirm('Reset all saved budget data in this browser? This removes allocations, nested categories, expenses, and settings.'))return;
+ if(!confirm('Final confirmation: this cannot be undone unless you have exported a JSON backup.'))return;
+ state=fresh();save();render();setError('');
+});
+function load(){
+ try{const raw=localStorage.getItem(KEY);if(raw)state=normalize(JSON.parse(raw))}
+ catch(e){state=fresh();$('saveStatus').textContent='Saved data could not be read'}
+ syncAuto();render();save();
+}
+load();
+})();
+</script>
+</body>
+</html>
